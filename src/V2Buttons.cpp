@@ -18,7 +18,7 @@ static void pinInterrupt() {
 }
 
 void V2Buttons::Button::begin() {
-  pinMode(_pin, INPUT_PULLUP);
+  pinMode(_pin, _high ? INPUT_PULLDOWN : INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(_pin), pinInterrupt, CHANGE);
 
   this->_next   = _buttons.list;
@@ -43,7 +43,7 @@ void V2Buttons::loop() {
 }
 
 bool V2Buttons::Button::loop() {
-  const bool down = digitalRead(_pin) == LOW;
+  const bool down = digitalRead(_pin) == _high ? HIGH : LOW;
 
   switch (_state) {
     case Button::State::Idle:
