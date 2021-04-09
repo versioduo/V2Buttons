@@ -18,7 +18,11 @@ static void pinInterrupt() {
 }
 
 void V2Buttons::Button::begin() {
-  pinMode(_pin, _high ? INPUT_PULLDOWN : INPUT_PULLUP);
+  if (!_pushpull)
+    pinMode(_pin, _high ? INPUT_PULLDOWN : INPUT_PULLUP);
+  else
+    pinMode(_pin, INPUT);
+
   attachInterrupt(digitalPinToInterrupt(_pin), pinInterrupt, CHANGE);
 
   this->_next   = _buttons.list;

@@ -15,7 +15,12 @@ public:
 
   class Button {
   public:
-    constexpr Button(const Config *config, uint8_t pin, bool high = false) : _config(config), _pin(pin), _high{high} {}
+    // The the internal pulldown/up resistor will be enabled if pushpull is false.
+    constexpr Button(const Config *config, uint8_t pin, bool high = false, bool pushpull = false) :
+      _config(config),
+      _pin(pin),
+      _high{high},
+      _pushpull{pushpull} {}
 
     void begin();
     bool loop();
@@ -45,6 +50,7 @@ public:
     const Config *_config;
     const uint8_t _pin;
     bool _high;
+    bool _pushpull;
     Button *_next{};
     enum class State { Idle, WaitDown, Down, Hold, Up, Reset } _state{State::Idle};
     uint8_t _clicks{};
