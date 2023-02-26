@@ -1,3 +1,6 @@
+// © Kay Sievers <kay@versioduo.com>, 2020-2022
+// SPDX-License-Identifier: Apache-2.0
+
 #pragma once
 
 #include <Arduino.h>
@@ -7,10 +10,10 @@ public:
   // No config or zero values will not count clicks and not detect long-presses.
   struct Config {
     // Time to wait count multiple clicks, usually ~150 milliseconds.
-    unsigned long click_usec;
+    unsigned long clickUsec;
 
     // Time to detect a long-press, usually ~300 milliseconds.
-    unsigned long hold_usec;
+    unsigned long holdUsec;
   };
 
   class Button {
