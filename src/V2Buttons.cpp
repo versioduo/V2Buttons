@@ -11,9 +11,9 @@ static struct {
   uint32_t event;
 
   // The list of all created buttons
-  V2Buttons::Button *list;
+  V2Buttons::Button* list;
 
-  volatile bool busy;
+  volatile bool busy{true};
 } _buttons{};
 
 static void pinInterrupt() {
@@ -43,10 +43,9 @@ void V2Buttons::loop() {
   _buttons.usec = micros();
 
   _buttons.busy = false;
-  for (Button *button = _buttons.list; button; button = button->_next) {
+  for (Button* button = _buttons.list; button; button = button->_next)
     if (button->loop())
       _buttons.busy = true;
-  }
 }
 
 bool V2Buttons::Button::loop() {
@@ -57,7 +56,7 @@ bool V2Buttons::Button::loop() {
       if (down) {
         // The button was pressed, record the down time.
         _state = Button::State::WaitDown;
-        _usec   = micros();
+        _usec  = micros();
         _event = _buttons.event++;
         _busy  = true;
       }
@@ -98,9 +97,9 @@ bool V2Buttons::Button::loop() {
       // The button was released, a click, not long enough to raise a
       // 'Hold' event.
       _state = Button::State::Up;
-      
-      _usec   = micros();
-      _busy  = true;
+
+      _usec = micros();
+      _busy = true;
       break;
 
     case Button::State::Hold:
@@ -151,3 +150,4 @@ bool V2Buttons::Button::loop() {
 
   return _busy;
 }
+

@@ -1,25 +1,21 @@
-// © Kay Sievers <kay@versioduo.com>, 2020-2022
-// SPDX-License-Identifier: Apache-2.0
-
 #pragma once
-
 #include <Arduino.h>
 
 class V2Buttons {
 public:
   // No config or zero values will not count clicks and not detect long-presses.
   struct Config {
-    // Time to wait count multiple clicks, usually ~150 milliseconds.
+    // Time to wait count multiple clicks, usually ~200 milliseconds.
     unsigned long clickUsec;
 
-    // Time to detect a long-press, usually ~300 milliseconds.
+    // Time to detect a long-press, usually ~500 milliseconds.
     unsigned long holdUsec;
   };
 
   class Button {
   public:
     // The the internal pulldown/up resistor will be enabled if pushpull is false.
-    constexpr Button(const Config *config, uint8_t pin, bool high = false, bool pushpull = false) :
+    constexpr Button(const Config* config, uint8_t pin, bool high = false, bool pushpull = false) :
       _config(config),
       _pin(pin),
       _high{high},
@@ -50,13 +46,13 @@ public:
 
   private:
     friend class V2Buttons;
-    const Config *_config;
+    const Config* _config;
     const uint8_t _pin;
-    bool _high;
-    bool _pushpull;
-    Button *_next{};
+    bool          _high;
+    bool          _pushpull;
+    Button*       _next{};
     enum class State { Idle, WaitDown, Down, Hold, Up, Reset } _state{State::Idle};
-    uint8_t _clicks{};
+    uint8_t       _clicks{};
     unsigned long _usec{};
 
     // Event number assigned when we wake up from idle. All calls for the same
@@ -67,7 +63,7 @@ public:
     bool _busy{};
   };
 
-  // Check all registered buttons.
+  // Check for pending events.
   //
   // The pins of the buttons needs to support external interrupts to trigger
   // the measurement.
